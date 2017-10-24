@@ -115,7 +115,7 @@ def get_toy_data(n_points=10):
 
 
 def get_loan_data(n_points=1000):
-    data = pd.read_csv('loans_workshop.csv')
+    data = pd.read_csv('../../data/loans_workshop.csv')
     features = [f for f in data.columns if f != 'defaulted']
     target = 'defaulted'
     data = data.sample(n_points)
