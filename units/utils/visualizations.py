@@ -7,15 +7,13 @@ from bokeh.plotting import figure, show
 from sklearn.model_selection import train_test_split
 import seaborn as sns
 from matplotlib import pyplot as plt
-from sklearn.base import  BaseEstimator
+from sklearn.base import BaseEstimator
+
 
 # TODO: add crosses with the train set
 # TODO: clean up API, making sure not to break the notebooks
 # TODO: add the accuracy score to the chart
-# TODO: predict the area of the whole thing not just training set area
-# TODO: pass the data as a multi-index Series, to keep consistency
 # TODO: add more datasets for the smarty pants out there
-# TODO: add graphviz
 
 def plot_data(data, target, feature1, feature2, model=None, scatter=True,
               out_of_sample=False, probabilities=True, n_points=500):
