@@ -7,15 +7,43 @@ from bokeh.plotting import figure, show
 from sklearn.model_selection import train_test_split
 
 
+def get_cross_data(n_points=10):
+    x = np.linspace(1, n_points, n_points)
+    y = np.linspace(1, n_points * 100, n_points)
+
+    q = pd.DataFrame(list(product(x, y)), columns=['a', 'b'])
+    q['c'] = 0
+    q = q.fillna(0)
+    q.loc[((q['b'] < q['b'].median()) & (q['a'] < q['a'].median())), 'c'] = 1
+    q.loc[((q['b'] > q['b'].median()) & (q['a'] > q['a'].median())), 'c'] = 1
+    return q
+
+
+def get_linear_data(n_points=10):
+    x = np.linspace(1, n_points, n_points)
+    y = np.linspace(1, n_points, n_points)
+
+    q = pd.DataFrame(list(product(x, y)), columns=['a', 'b'])
+    q['c'] = 0
+    q = q.fillna(0)
+    q['c'] = q['a'] + q['b']
+    q['c'] = q['c'].map(lambda x: 1 if x > q['c'].median() else 0)
+    return q
+
+
+# TODO: pass the data as a multi-index Series, to keep consistency
+
 def plot_data(model, data, target, feature1, feature2, scatter=True,
               area=True, out_of_sample=False, probabilities=True, n_points=500):
+    # TODO: call these things x and y, x.name and y.name, much less error prone
+    # TODO: make the image smaller for some reason it seems to be cutting in jupyter
     p = figure(
         title='%s predictions ' % model.__class__.__name__,
         x_axis_label=feature1,
         y_axis_label=feature2,
         x_range=(data[feature1].min(), data[feature1].max()),
         y_range=(data[feature2].min(), data[feature2].max()),
-        plot_width=800,
+        plot_width=600,
         plot_height=500,
     )
 
@@ -75,6 +103,8 @@ def get_area(p, model, train, target, feature1, feature2, color_mapper,
         area_space['predictions'] = model.predict(
             area_space[[feature1, feature2]])
 
+    # TODO: understand why the transpose. I suspect the problem might
+    # be the axis names
     array_data = area_space.set_index([feature1, feature2]).unstack().values
 
     p.image(
@@ -83,7 +113,6 @@ def get_area(p, model, train, target, feature1, feature2, color_mapper,
         y=y.min(),
         dw=(x.max() - x.min()),
         dh=(y.max() - y.min()),
-
         color_mapper=color_mapper,
         alpha=.5)
 
@@ -100,18 +129,6 @@ def get_scatterplot(p, data, target, feature1, feature2, black_and_white):
               fill_alpha=1,
               line_color='black',
               size=7)
-
-
-def get_toy_data(n_points=10):
-    x = np.linspace(1, n_points, n_points)
-    y = np.linspace(1, n_points * 100, n_points)
-
-    q = pd.DataFrame(list(product(x, y)), columns=['a', 'b'])
-    q['c'] = 0
-    q = q.fillna(0)
-    q.loc[((q['b'] < q['b'].median()) & (q['a'] < q['a'].median())), 'c'] = 1
-    q.loc[((q['b'] > q['b'].median()) & (q['a'] > q['a'].median())), 'c'] = 1
-    return q
 
 
 def get_loan_data(n_points=1000):
