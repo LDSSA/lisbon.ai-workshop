@@ -6,3 +6,5 @@ seaborn
 matplotlib
 bokeh
 graphviz
+ipywidgets
+
