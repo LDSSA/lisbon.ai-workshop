@@ -10,12 +10,11 @@ RUN apt-get update \
         libblas-dev \
         liblapack-dev \
         gfortran \
+        graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
 RUN pip3 install --no-cache-dir -r requirements.txt
-
-RUN pip3 install graphviz
 
 EXPOSE 8888
 
