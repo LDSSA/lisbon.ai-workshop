@@ -5,3 +5,6 @@ scikit-learn
 seaborn
 matplotlib
 bokeh
+graphviz
+ipywidgets
+

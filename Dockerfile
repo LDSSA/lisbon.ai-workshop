@@ -10,6 +10,7 @@ RUN apt-get update \
         libblas-dev \
         liblapack-dev \
         gfortran \
+        graphviz \
     && rm -rf /var/lib/apt/lists/*
 
 COPY requirements.txt requirements.txt
