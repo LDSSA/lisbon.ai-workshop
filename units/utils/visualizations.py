@@ -8,6 +8,8 @@ from sklearn.model_selection import train_test_split
 import seaborn as sns
 from matplotlib import pyplot as plt
 from sklearn.base import BaseEstimator
+from sklearn.metrics import r2_score
+from sklearn.linear_model import LinearRegression
 
 
 # TODO: add crosses with the train set
@@ -156,3 +158,56 @@ def plot_scatter_3_features(data, feature1, feature2, feature3, title):
                      black_and_white=False)
 
     show(p)
+
+
+def calculate_quartet_stats(df_list):
+    """
+    Why in the name of Satan would anyone code this way?
+
+    :param df_list:
+    :return:
+    """
+    stats = {}
+    stats['corr x and y'] = {}
+    stats['mean x'] = {}
+    stats['mean y'] = {}
+    stats['std x'] = {}
+    stats['std y'] = {}
+    stats['r2'] = {}
+    stats['max x'] = {}
+    stats['max y'] = {}
+    stats['min x'] = {}
+    stats['min y'] = {}
+
+    for df in df_list:
+        stats['corr x and y'][df.name] = df['x'].corr(df['y'])
+        stats['mean x'][df.name] = df['x'].mean()
+        stats['mean y'][df.name] = df['y'].mean()
+        stats['std x'][df.name] = df['x'].std()
+        stats['std y'][df.name] = df['y'].std()
+        stats['r2'][df.name] = r2_score(df['x'], df['y'])
+        stats['max x'][df.name] = df['x'].max()
+        stats['max y'][df.name] = df['y'].max()
+        stats['min x'][df.name] = df['x'].min()
+        stats['min y'][df.name] = df['y'].min()
+
+    return pd.DataFrame(stats)
+
+
+def plot_scatter_and_linreg(df, col='b'):
+    """
+    This is hardcoded for our example in the tutorial
+    If you want to generalize, abstract away the feature names
+
+    :param df: the data from the quartet
+    :param col: the color to use in the chart
+    :return:
+    """
+    lr = LinearRegression()
+    lr.fit(df['x'].reshape(-1, 1), df['y'])
+    df.plot(kind='scatter', x='x', y='y', c=col, s=50)
+    x_pred = np.linspace(df['x'].min(), df['x'].max(), 10)
+    y_pred = lr.predict(x_pred.reshape(-1, 1))
+    plt.plot(x_pred, y_pred, ls=':', c=col)
+
+    plt.title(df.name)
