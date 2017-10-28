@@ -5,6 +5,7 @@ from sklearn.datasets import make_moons, make_circles, make_classification
 
 
 def _get_scikit_datasets(n_points=100):
+    rng = np.random.RandomState(2)
     X, y = make_classification(n_samples=n_points, n_features=2,
                                n_redundant=0, n_informative=2,
                                random_state=1, n_clusters_per_class=1)
