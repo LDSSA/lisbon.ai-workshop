@@ -1,6 +1,6 @@
 # lisbon.ai visualizing your models workshop
 
-Some classic concepts and some old concepts all nice, pretty, and visual!
+Some classic concepts and some new concepts all nice, pretty, and visual!
 
 ## Structure
 
